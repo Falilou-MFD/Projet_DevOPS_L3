@@ -1,0 +1,15 @@
+# pour tout fichier python
+*.pyc
+__pycache__/
+
+# l'environnement virtuel
+backend_venv/
+
+# le fichier des variables sensibles
+.env
+
+# pour vscode 
+.vscode/
+
+# juste du texte pour des recherches et références
+text.text
