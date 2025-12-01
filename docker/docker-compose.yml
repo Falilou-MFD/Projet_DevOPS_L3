@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: woyofal-frontend
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_API_URL=${REACT_APP_API_URL:-http://localhost:5000/api}
+      - REACT_APP_MOCK_API=${REACT_APP_MOCK_API:-false}
+    restart: unless-stopped
+    networks:
+      - woyofal-network
+
+networks:
+  woyofal-network:
+    driver: bridge
+
+# ============================================
+# Instructions d'utilisation Docker
+# ============================================
+
+# BUILD ET DÉMARRAGE
+# ------------------
+# 1. Se placer dans le dossier docker :
+#    cd docker
+#
+# 2. Build de l'image :
+#    docker-compose build
+#
+# 3. Démarrer le conteneur :
+#    docker-compose up -d
+#
+# 4. Arrêter le conteneur :
+#    docker-compose down
+#
+# 5. Voir les logs :
+#    docker-compose logs -f frontend
+#
+# L'application sera accessible sur http://localhost:3000
+
+# CONFIGURATION
+# -------------
+# Pour configurer l'URL de l'API, créez un fichier .env dans le dossier docker :
+#
+# REACT_APP_API_URL=http://votre-backend:5000/api
+# REACT_APP_MOCK_API=false
+
+# BUILD MANUEL (sans docker-compose)
+# -----------------------------------
+# 1. Build de l'image :
+#    docker build -f docker/Dockerfile -t woyofal-frontend .
+#
+# 2. Run du conteneur :
+#    docker run -d -p 3000:80 \
+#      -e REACT_APP_API_URL=http://localhost:5000/api \
+#      --name woyofal-frontend \
+#      woyofal-frontend
