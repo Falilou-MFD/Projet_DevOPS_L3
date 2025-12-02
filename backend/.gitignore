@@ -11,6 +11,9 @@ backend_venv/
 # pour vscode 
 .vscode/
 
-# juste du texte pour des recherches et références
-text.txt
+migrations/
+
+./db.sqlite3
+
+
 
