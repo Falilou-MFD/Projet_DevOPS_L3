@@ -1,0 +1,16 @@
+# backend-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-backend-service
+spec:
+  selector:
+    app: django-backend
+  ports:
+    # Le port que le service expose au cluster
+    - protocol: TCP
+      port: 8000 
+      # Le port sur lequel le conteneur écoute réellement
+      targetPort: 8000 
+  # Utiliser ClusterIP pour l'accès interne (le frontend y accédera)
+  type: ClusterIP
