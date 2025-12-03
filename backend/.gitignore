@@ -1,0 +1,19 @@
+# pour tout fichier python
+*.pyc
+__pycache__/
+
+# l'environnement virtuel
+backend_venv/
+
+# le fichier des variables sensibles
+.env
+
+# pour vscode 
+.vscode/
+
+migrations/
+
+./db.sqlite3
+
+
+
