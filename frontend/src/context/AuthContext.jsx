@@ -1,54 +1,80 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+import { publicAxios } from '../api/axios'; 
+import jwt_decode from 'jwt-decode'; // Nécessite npm install jwt-decode (ou utilisez une fonction simple d'extraction)
 
-const AuthContext = createContext(null);
+const AuthContext = createContext();
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth doit être utilisé dans un AuthProvider');
-  }
-  return context;
-};
+export const useAuth = () => useContext(AuthContext);
+
+// Fonction simple pour décoder le rôle si on ne veut pas installer jwt-decode
+/*
+const decodeRole = (token) => {
+    try {
+        const payload = token.split('.')[1];
+        const decoded = JSON.parse(atob(payload));
+        // Assurez-vous que 'role' est inclus dans le payload du token JWT par votre backend
+        return decoded.role || 'P'; 
+    } catch (e) {
+        return 'P';
+    }
+}
+*/
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Charger les données depuis localStorage au démarrage
-    const savedToken = localStorage.getItem('token');
-    const savedUser = localStorage.getItem('user');
-
-    if (savedToken && savedUser) {
-      setToken(savedToken);
-      setUser(JSON.parse(savedUser));
+    const initialToken = localStorage.getItem('access_token');
+    const [isAuthenticated, setIsAuthenticated] = useState(!!initialToken);
+    
+    // Initialisation du rôle (si vous avez besoin du rôle dans le frontend)
+    const [userRole, setUserRole] = useState(null); 
+    
+    // Fonction simple de décodage pour obtenir le rôle de l'utilisateur
+    const decodeRoleFromToken = (token) => {
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            return payload.role; 
+        } catch (e) {
+            return 'P'; // Par défaut
+        }
     }
-    setLoading(false);
-  }, []);
 
-  const login = (authToken, userData) => {
-    setToken(authToken);
-    setUser(userData);
-    localStorage.setItem('token', authToken);
-    localStorage.setItem('user', JSON.stringify(userData));
-  };
 
-  const logout = () => {
-    setToken(null);
-    setUser(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-  };
+    const login = async (username, password) => {
+        try {
+            const response = await publicAxios.post('/auth/login/', {
+                username,
+                password
+            });
+            
+            localStorage.setItem('access_token', response.data.access);
+            localStorage.setItem('refresh_token', response.data.refresh);
+            
+            setIsAuthenticated(true);
+            setUserRole(decodeRoleFromToken(response.data.access)); // Définir le rôle après connexion
+            
+            return true; 
+        } catch (error) {
+            console.error("Erreur de connexion:", error.response?.data);
+            setIsAuthenticated(false);
+            throw error; 
+        }
+    };
 
-  const value = {
-    user,
-    token,
-    loading,
-    login,
-    logout,
-    isAuthenticated: !!token,
-  };
+    const logout = () => {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        setIsAuthenticated(false);
+        setUserRole(null);
+        // Redirection vers la page de connexion
+        window.location.href = '/login'; 
+    };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+    const value = {
+        isAuthenticated,
+        userRole,
+        login,
+        logout,
+        // On n'inclut pas register ici, car il ne crée pas d'état de session
+    };
+
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
