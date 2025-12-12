@@ -1,0 +1,273 @@
+/* Variables et Réinitialisation */
+/* :root {
+  --primary: #007bff;
+  --secondary: #6c757d;
+  --success: #28a745;
+  --danger: #dc3545;
+  --light: #f8f9fa;
+  --dark: #343a40;
+  --bg-color: #f4f6f9;
+  --card-bg: #ffffff;
+}
+
+
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--dark);
+  min-height: 100vh;
+} */
+
+/* --- 1. Variables CSS (Custom Properties) --- */
+/* --- Variables CSS (Custom Properties) CORRIGÉES --- */
+:root {
+    /* Palette Primaire / Woyofal */
+    --color-primary: #E63946;    /* Rouge Woyofal */
+    --color-secondary: #1E88E5;  /* Bleu clair */
+    --color-accent-violet: #8E24AA;
+    --color-accent-orange: #FF6F00;
+
+    /* Palette Neutre */
+    --color-neutral-light: #F5F5F5;
+    --color-neutral-dark: #212121;
+
+    /* * Mappage des variables génériques aux couleurs Woyofal.
+     * C'est essentiel pour que tous les autres sélecteurs (boutons, h2)
+     * qui utilisaient --primary et --dark fonctionnent.
+     */
+    --primary: var(--color-primary); /* ROUGE pour les boutons et titres */
+    --secondary: var(--color-secondary); /* Bleu clair pour le mode 'disabled' */
+    
+    --success: #28a745; /* Vert pour messages de succès */
+    --danger: #dc3545; /* Rouge standard pour messages d'erreur */
+    --light: var(--color-neutral-light);
+    --dark: var(--color-neutral-dark); 
+    
+    --bg-color: var(--color-neutral-light); /* Fond de page */
+    --card-bg: #ffffff; /* Fond des cartes/conteneurs */
+    
+    --color-background: var(--bg-color); 
+    --color-text-primary: var(--dark);
+}
+
+/* --- 2. Application des variables à la structure (à conserver) --- */
+
+* {
+box-sizing: border-box;
+ margin: 0;
+ padding: 0;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  margin: 0;
+  font-family: 'Roboto', Arial, sans-serif;
+}
+
+.auth-container {
+  margin: 0 auto;
+   
+}
+
+
+/* Style de l'En-tête (Header) */
+.header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 15px 30px;
+/* ✅ Utilise maintenant --color-primary pour le fond du header */
+background-color: var(--color-primary); 
+color: white; /* Le texte reste blanc */
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Style des Liens de Navigation */
+.header .nav-links a,
+.header .nav-links button {
+color: white; 
+text-decoration: none;
+margin-left: 20px;
+padding: 8px 12px;
+border: none;
+background: transparent;
+cursor: pointer;
+font-size: 1em;
+transition: background-color 0.3s;
+border-radius: 4px;
+}
+
+.header .nav-links a:hover,
+.header .nav-links button:hover {
+background-color: var(--color-accent-orange); 
+}
+
+/* Style du bouton de Déconnexion */
+.header .nav-links button {
+/* Utilise maintenant --color-accent-orange pour le bouton de déconnexion */
+ background-color:#E63946 ; 
+ font-weight: 600;
+}
+/* ... (Le reste des styles du header/nav-links est conservé) ... */
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Conteneurs de Formulaire/Card */
+.auth-container, .card {
+  background-color: var(--card-bg);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+  margin-top: 50px;
+}
+
+h2 {
+  color: var(--primary);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input, select {
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+button {
+  padding: 12px;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s;
+}
+
+button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+button:disabled {
+  background-color: var(--secondary);
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: var(--danger);
+  margin-top: 10px;
+  text-align: center;
+}
+
+.success-message {
+  color: var(--success);
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Layout et Navigation */
+.header {
+  background-color: var(--dark);
+  color: white;
+  width: 100%;
+  padding: 15px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-links a, .nav-links button {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.nav-links a.active {
+  font-weight: bold;
+  border-bottom: 2px solid white;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Simulation et Résultats */
+.simulation-card .resultat {
+    background-color: var(--light);
+    border-left: 5px solid var(--success);
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 4px;
+}
+
+.resultat ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+}
+.resultat li {
+    padding: 5px 0;
+    border-bottom: 1px dotted #ccc;
+}
+.resultat li:last-child {
+    border-bottom: none;
+}
+
+/* Historique */
+.historique-list {
+    margin-top: 20px;
+}
+.historique-item {
+    background-color: var(--light);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
+}
+
+/* Recommandation */
+.reco-box {
+    text-align: center;
+    padding: 40px;
+    margin-top: 30px;
+    background: linear-gradient(135deg, #e6f7ff, #ffffff);
+    border: 1px solid #b3d9ff;
+    border-radius: 10px;
+}
+.reco-montant {
+    font-size: 2.5em;
+    color: var(--primary);
+    font-weight: bold;
+    margin: 10px 0;
+}
+.reco-duree {
+    font-size: 1.2em;
+    color: var(--success);
+}
+/* --- Correction de la recommandation ML --- */
+.reco-message-info {
+    margin-top: 20px;
+    font-style: italic;
+    color: var(--secondary); /* Ici, la variable CSS est correcte */
+}
